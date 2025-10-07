@@ -1,5 +1,8 @@
 # Secure-Multi-Section-Network-Design
 This is a three section network design in packet tracer, consist of three routers, three switches and several pcs per vlan and the topology is interconnected in triangle design.
+# Network Topology Diagram
+<img width="831" height="410" alt="topology diagram" src="https://github.com/user-attachments/assets/072b7eab-08dc-4ce5-a40b-1a3877036c85" />
+
 # Switch S0 Vlan Segmentation
 Switch>en.\
 Switch#conf t.\
@@ -109,3 +112,239 @@ S2(config-if)#description trunk to R2.\
 S2(config-if)#exit.\
 S2(config)#int r f0/8-24, g0/2.\
 S2(config-if-range)#sh
+# Switch S0 Security Configuration
+S0>en.\
+S0#conf t.\
+S0(config)#int r f0/1-7.\
+S0(config-if-range)#switchport port-security.\
+S0(config-if-range)#switchport port-security maximum 1.\
+S0(config-if-range)#switchport port-security violation shutdown.\
+S0(config-if-range)#switchport port-security mac-address sticky.\
+S0(config-if-range)#exit.\
+S0(config)#int r f0/1-7.\
+S0(config-if-range)#spanning-tree portfast.\
+S0(config-if-range)#spanning-tree bpduguard enable.\
+S0(config-if-range)#exit.\
+S0(config)#ip dhcp snooping.\
+S0(config)#ip dhcp snooping vlan 10,20,30.\
+S0(config)#int g0/1.\
+S0(config-if)#ip dhcp snooping trust.\
+S0(config-if)#exit.\
+S0(config)#int r f0/8-24,g0/2.\
+S0(config-if-range)#sh
+# Switch S1 Security Configuration
+S1>en.\
+S1#conf t.\
+S1(config)#int r f0/1-7.\
+S1(config-if-range)#switchport port-security.\
+S1(config-if-range)#switchport port-security maximum 1.\
+S1(config-if-range)#switchport port-security violation shutdown.\
+S1(config-if-range)#switchport port-security mac-address sticky.\
+S1(config-if-range)#exit.\
+S1(config)#int r f0/1-7.\
+S1(config-if-range)#spanning-tree portfast.\
+S1(config-if-range)#spanning-tree bpduguard enable.\
+S1(config-if-range)#exit.\
+S1(config)#ip dhcp snooping.\
+S1(config)#ip dhcp snooping vlan 10,20,30.\
+S1(config)#int g0/1.\
+S1(config-if)#ip dhcp snooping trust.
+# Switch S2 Security Configuration
+S2>en.\
+S2#conf t.\
+S2(config)#int r f0/1-7.\
+S2(config-if-range)#switchport port-security.\
+S2(config-if-range)#switchport port-security maximum 1.\
+S2(config-if-range)#switchport port-security violation shutdown.\
+S2(config-if-range)#switchport port-security mac-address sticky.\
+S2(config-if-range)#exit.\
+S2(config)#int r f0/1-7.\
+S2(config-if-range)#spanning-tree portfast.\
+S2(config-if-range)#spanning-tree bpduguard enable.\
+S2(config-if-range)#exit.\
+S2(config)#ip dhcp snooping.\
+S2(config)#ip dhcp snooping vlan 10,20,30.\
+S2(config)#int g0/1.\
+S2(config-if)#ip dhcp snooping trust.\
+# Router R0 Subinterface and dhcp configuration
+Router>en\
+Router#conf t\
+Router(config)#int g0/0\
+Router(config-if)#no sh\
+Router(config-if)#hostname R0\
+R0(config)#no ip domain-lookup\
+R0(config)#int g0/0.10\
+R0(config-subif)#encapsulation dot1q 10\
+R0(config-subif)#ip address 10.0.1.1 255.255.255.0\
+R0(config-subif)#description Management-VLAN\
+R0(config-subif)#exit\
+R0(config)#int g0/0.20\
+R0(config-subif)#encapsulation dot1q 20\
+R0(config-subif)#ip address 10.0.2.1 255.255.255.0\
+R0(config-subif)#description Users-VLAN\
+R0(config-subif)#exit\
+R0(config)#int g0/0.30\
+R0(config-subif)#encapsulation dot1q 30\
+R0(config-subif)#ip address 10.0.3.1 255.255.255.0\
+R0(config-subif)#description Guests-VLAN\
+R0(config)#ip dhcp excluded-address 10.0.1.1 10.0.1.12\
+R0(config)#ip dhcp excluded-address 10.0.2.1 10.0.2.12\
+R0(config)#ip dhcp excluded-address 10.0.3.1 10.0.3.12\
+R0(config)#ip dhcp pool Management-VLAN\
+R0(dhcp-config)#network 10.0.1.0 255.255.255.0\
+R0(dhcp-config)#default-router 10.0.1.1\
+R0(dhcp-config)#dns-server 8.8.8.8\
+R0(dhcp-config)#exit\
+R0(config)#ip dhcp pool Users-VLAN\
+R0(dhcp-config)#network 10.0.2.0 255.255.255.0\
+R0(dhcp-config)#default-router 10.0.2.1\
+R0(dhcp-config)#dns-server 8.8.8.8\
+R0(dhcp-config)#exit\
+R0(config)#ip dhcp pool Guests-VLAN\
+R0(dhcp-config)#network 10.0.3.0 255.255.255.0\
+R0(dhcp-config)#default-router 10.0.3.1\
+R0(dhcp-config)#dns-server 8.8.8.8\
+# Router R1 Subinterface and dhcp configuration
+Router>\
+Router>en\
+Router#conf t\
+Router(config)#int g0/0\
+Router(config-if)#no sh\
+Router(config-if)#hostname R1\
+R1(config)#no ip domain-lookup\
+R1(config)#int g0/0.10\
+R1(config-subif)#encapsulation dot1q 10\
+R1(config-subif)#ip address 10.1.1.1 255.255.255.0\
+R1(config-subif)#description Management-VLAN\
+R1(config-subif)#exit\
+R1(config)#int g0/0.20\
+R1(config-subif)#encapsulation dot1q 20\
+R1(config-subif)#ip address 10.1.2.1 255.255.255.0\
+R1(config-subif)#description Users-VLAN\
+R1(config-subif)#exit\
+R1(config)#int g0/0.30\
+R1(config-subif)#encapsulation dot1q 30\
+R1(config-subif)#ip address 10.1.3.1 255.255.255.0\
+R1(config-subif)#description Guests-VLAN\
+R1(config)#ip dhcp excluded-address 10.1.1.1 10.1.1.12\
+R1(config)#ip dhcp excluded-address 10.1.2.1 10.1.2.12\
+R1(config)#ip dhcp excluded-address 10.1.3.1 10.1.3.12\
+R1(config)#ip dhcp pool Management-VLAN\
+R1(dhcp-config)#network 10.1.1.0 255.255.255.0\
+R1(dhcp-config)#default-router 10.1.1.1\
+R1(dhcp-config)#dns-server 8.8.8.8\
+R1(dhcp-config)#exit\
+R1(config)#ip dhcp pool Users-VLAN\
+R1(dhcp-config)#network 10.1.2.0 255.255.255.0\
+R1(dhcp-config)#default-router 10.1.2.1\
+R1(dhcp-config)#dns-server 8.8.8.8\
+R1(dhcp-config)#exit\
+R1(config)#ip dhcp pool Guests-VLAN\
+R1(dhcp-config)#network 10.1.3.0 255.255.255.0\
+R1(dhcp-config)#default-router 10.1.3.1\
+R1(dhcp-config)#dns-server 8.8.8.8\
+# Router R2 Subinterface and dhcp configuration
+Router>en\
+Router#conf t\
+Router(config)#hostname R2\
+R2(config)#no ip domain-lookup\
+R2(config)#int g0/0.10\
+R2(config-subif)#encapsulation dot1q 10\
+R2(config-subif)#ip address 10.2.1.1 255.255.255.0\
+R2(config-subif)#description Management-VLAN\
+R2(config-subif)#exit\
+R2(config)#int g0/0.20\
+R2(config-subif)#encapsulation dot1q 20\
+R2(config-subif)#ip address 10.2.2.1 255.255.255.0\
+R2(config-subif)#description Users-VLAN\
+R2(config-subif)#exit\
+R2(config)#int g0/0.30\
+R2(config-subif)#encapsulation dot1q 30\
+R2(config-subif)#ip address 10.2.3.1 255.255.255.0\
+R2(config-subif)#description Guests-VLAN\
+R2(config-subif)#exit\
+R2(config)#ip dhcp excluded-address 10.2.1.1 10.2.1.12\
+R2(config)#ip dhcp excluded-address 10.2.2.1 10.2.2.12\
+R2(config)#ip dhcp excluded-address 10.2.3.1 10.2.3.12\
+R2(config)#ip dhcp pool Management-VLAN\
+R2(dhcp-config)#network 10.2.1.0 255.255.255.0\
+R2(dhcp-config)#default-router 10.2.1.1\
+R2(dhcp-config)#dns-server 8.8.8.8\
+R2(dhcp-config)#exit\
+R2(config)#ip dhcp pool Users-VLAN\
+R2(dhcp-config)#network 10.2.2.0 255.255.255.0\
+R2(dhcp-config)#default-router 10.2.2.1\
+R2(dhcp-config)#dns-server 8.8.8.8\
+R2(config)#ip dhcp pool Guest-VLAN\
+R2(dhcp-config)#network 10.2.3.0 255.255.255.0\
+R2(dhcp-config)#default-router 10.2.3.1\
+R2(dhcp-config)#dns-server 8.8.8.8\
+# Router R0 OSPF configuration
+R0>en\
+R0#conf t\
+R0(config)#int g0/1\
+R0(config-if)#ip address 192.168.10.1 255.255.255.252\
+R0(config-if)#no sh\
+R0(config-if)#exit\
+R0(config)#int g0/2\
+R0(config-if)#ip address 192.168.11.1 255.255.255.252\
+R0(config-if)#no sh\
+R0(config-if)#router ospf 1\
+R0(config-router)#router-id 1.1.1.1\
+R0(config-router)#network 10.0.1.0 0.0.0.255 area 0\
+R0(config-router)#network 10.0.2.0 0.0.0.255 area 0\
+R0(config-router)#network 10.0.3.0 0.0.0.255 area 0\
+R0(config-router)#network 192.168.10.0 0.0.0.3 area 0\
+R0(config-router)#network 192.168.11.0 0.0.0.3 area 0\
+R0(config-router)#passive-interface g0/0.10\
+R0(config-router)#passive-interface g0/0.20\
+R0(config-router)#passive-interface g0/0.30\
+R0(config-router)#end\
+R0#copy running-config startup-config\
+# Router R1 OSPF configuration
+R1>en\
+R1#conf t\
+R1(config)#int g0/1\
+R1(config-if)#ip address 192.168.10.2 255.255.255.252\
+R1(config-if)#no sh\
+R1(config-if)#int g0/2\
+R1(config-if)#ip address 192.168.22.1 255.255.255.252\
+R1(config-if)#no sh\
+R1(config-if)#router ospf 1\
+R1(config-router)#router-id 2.2.2.2\
+R1(config-router)#network 10.1.1.0 0.0.0.255 area 0\
+R1(config-router)#network 10.1.2.0 0.0.0.255 area 0\
+R1(config-router)#network 10.1.3.0 0.0.0.255 area 0\
+R1(config-router)#network 192.168.10.0 0.0.0.3 area 0\
+R1(config-router)#network 192.168.10.0 0.0.0.3 area 0\
+R1(config-router)#network 192.168.22.0 0.0.0.3 area 0\
+R1(config-router)#passive-interface g0/0.10\
+R1(config-router)#passive-interface g0/0.20\
+R1(config-router)#passive-interface g0/0.30\
+R1(config-router)#end\
+R1#copy running-config startup-config\
+# Router R2 OSPF configuration
+R2>en\
+R2#conf t\
+R2(config)#int g0/1\
+R2(config-if)#ip address 192.168.11.2 255.255.255.252\
+R2(config-if)#no sh\
+R2(config-if)#int g0/2\
+R2(config-if)#ip address 192.168.22.2 255.255.255.252\
+R2(config-if)#no sh\
+R2(config-if)#router ospf 1\
+R2(config-router)#router-id 3.3.3.3\
+R2(config-router)#network 10.2.1.0 0.0.0.255 area 0\
+R2(config-router)#network 10.2.2.0 0.0.0.255 area 0\
+R2(config-router)#network 10.2.3.0 0.0.0.255 area 0\
+R2(config-router)#network 192.168.11.0 0.0.0.3 area 0\
+R2(config-router)#network 192.168.22.0 0.0.0.3 area 0\
+R2(config-router)#passive-interface g0/0.10\
+R2(config-router)#passive-interface g0/0.20\
+R2(config-router)#passive-interface g0/0.30\
+R2(config-router)#end\
+R2#copy running-config startup-config\
+
+
+
+

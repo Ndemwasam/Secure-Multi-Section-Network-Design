@@ -165,7 +165,8 @@ S2(config-if-range)#exit.\
 S2(config)#ip dhcp snooping.\
 S2(config)#ip dhcp snooping vlan 10,20,30.\
 S2(config)#int g0/1.\
-S2(config-if)#ip dhcp snooping trust.\
+S2(config-if)#ip dhcp snooping trust.
+
 # Router R0 Subinterface and dhcp configuration
 Router>en\
 Router#conf t\
@@ -203,7 +204,8 @@ R0(dhcp-config)#exit\
 R0(config)#ip dhcp pool Guests-VLAN\
 R0(dhcp-config)#network 10.0.3.0 255.255.255.0\
 R0(dhcp-config)#default-router 10.0.3.1\
-R0(dhcp-config)#dns-server 8.8.8.8\
+R0(dhcp-config)#dns-server 8.8.8.8
+
 # Router R1 Subinterface and dhcp configuration
 Router>\
 Router>en\
@@ -242,7 +244,8 @@ R1(dhcp-config)#exit\
 R1(config)#ip dhcp pool Guests-VLAN\
 R1(dhcp-config)#network 10.1.3.0 255.255.255.0\
 R1(dhcp-config)#default-router 10.1.3.1\
-R1(dhcp-config)#dns-server 8.8.8.8\
+R1(dhcp-config)#dns-server 8.8.8.8
+
 # Router R2 Subinterface and dhcp configuration
 Router>en\
 Router#conf t\
@@ -278,7 +281,8 @@ R2(dhcp-config)#dns-server 8.8.8.8\
 R2(config)#ip dhcp pool Guest-VLAN\
 R2(dhcp-config)#network 10.2.3.0 255.255.255.0\
 R2(dhcp-config)#default-router 10.2.3.1\
-R2(dhcp-config)#dns-server 8.8.8.8\
+R2(dhcp-config)#dns-server 8.8.8.8
+
 # Router R0 OSPF configuration
 R0>en\
 R0#conf t\
@@ -300,7 +304,8 @@ R0(config-router)#passive-interface g0/0.10\
 R0(config-router)#passive-interface g0/0.20\
 R0(config-router)#passive-interface g0/0.30\
 R0(config-router)#end\
-R0#copy running-config startup-config\
+R0#copy running-config startup-config
+
 # Router R1 OSPF configuration
 R1>en\
 R1#conf t\
@@ -322,7 +327,8 @@ R1(config-router)#passive-interface g0/0.10\
 R1(config-router)#passive-interface g0/0.20\
 R1(config-router)#passive-interface g0/0.30\
 R1(config-router)#end\
-R1#copy running-config startup-config\
+R1#copy running-config startup-config
+
 # Router R2 OSPF configuration
 R2>en\
 R2#conf t\
@@ -343,8 +349,97 @@ R2(config-router)#passive-interface g0/0.10\
 R2(config-router)#passive-interface g0/0.20\
 R2(config-router)#passive-interface g0/0.30\
 R2(config-router)#end\
-R2#copy running-config startup-config\
+R2#copy running-config startup-config
 
+# Router R0 ACL and Security Configuration
+R0>en\
+R0#conf t\
+R0(config)#ip access-list extended GUEST_ACL\
+R0(config-ext-nacl)#deny ip 10.0.3.0 0.0.0.255 10.0.0.0 0.0.255.255\
+R0(config-ext-nacl)#deny ip 10.0.3.0 0.0.0.255 10.1.0.0 0.0.255.255\
+R0(config-ext-nacl)#deny ip 10.0.3.0 0.0.0.255 10.2.0.0 0.0.255.255\
+R0(config-ext-nacl)#permit ip any any\
+R0(config-ext-nacl)#exit\
+R0(config)#ip access-list extended USER_ACL\
+R0(config-ext-nacl)#deny ip 10.0.2.0 0.0.0.255 10.0.1.0 0.0.0.255\
+R0(config-ext-nacl)#deny ip 10.0.2.0 0.0.0.255 10.1.1.0 0.0.0.255\
+R0(config-ext-nacl)#deny ip 10.0.2.0 0.0.0.255 10.2.1.0 0.0.0.255\
+R0(config-ext-nacl)#permit ip any any\
+R0(config-ext-nacl)#exit\
+R0(config)# ip access-list extended MGMT_ACL\
+R0(config-ext-nacl)#permit ip any any\
+R0(config-ext-nacl)#exit\
+R0(config)#int g0/0.30\
+R0(config-subif)#ip access-group GUEST_ACL in\
+R0(config-subif)#exit\
+R0(config)#int g0/0.20\
+R0(config-subif)#ip access-group USER_ACL in\
+R0(config-subif)#int g0/0.10\
+R0(config-subif)#ip access-group MGMT_ACL in\
+R0(config-subif)#exit\
+R0(config)#ip domain-name greywan.com\
+R0(config)#crypto key generate rsa modulus 2048\
+R0(config)#username wantech privilege 15 secret Greym@nw@n1\
+*Mar 1 0:41:0.349: %SSH-5-ENABLED: SSH 1.99 has been enabled\
+R0(config)#ip access-list standard MGMT_ACCESS\
+R0(config-std-nacl)#permit 10.0.1.0 0.0.0.255\
+R0(config-std-nacl)#permit 10.1.1.0 0.0.0.255\
+R0(config-std-nacl)#permit 10.2.1.0 0.0.0.255\
+R0(config-std-nacl)#exit\
+R0(config)#line vty 0 4\
+R0(config-line)#access-class MGMT_ACCESS in\
+R0(config-line)#transport input ssh\
+R0(config-line)#login local\
+R0(config-line)#exec-timeout 5 0\
+R0(config-line)#exit\
+R0(config)#ip ssh version 2\
+R0(config)#service password-encryption\
+
+# Router R1 ACL and Security Configuration
+R1>en\
+R1#conf t\
+R1(config)#ip access-list extended Guests_ACL\
+R1(config-ext-nacl)#deny ip 10.1.3.0 0.0.0.255 10.0.0.0 0.0.255.255\
+R1(config-ext-nacl)#deny ip 10.1.3.0 0.0.0.255 10.1.0.0 0.0.255.255\
+R1(config-ext-nacl)#deny ip 10.1.3.0 0.0.0.255 10.2.0.0 0.0.255.255\
+R1(config-ext-nacl)#permit ip any any\
+R1(config-ext-nacl)#exit\
+R1(config)#int g0/0.30\
+R1(config-subif)#ip access-group Guests_ACL in\
+R1(config-subif)#exit\
+R1(config)#ip access-list extended Users_ACL\
+R1(config-ext-nacl)#deny ip 10.1.2.0 0.0.0.255 10.0.1.0 0.0.0.255\
+R1(config-ext-nacl)#deny ip 10.1.2.0 0.0.0.255 10.1.1.0 0.0.0.255\
+R1(config-ext-nacl)#deny ip 10.1.2.0 0.0.0.255 10.2.1.0 0.0.0.255\
+R1(config-ext-nacl)#permit ip any any\
+R1(config-ext-nacl)#exit\
+R1(config)#int g0/0.20\
+R1(config-subif)#ip access-group Users_ACL in\
+R1(config)#ip access-list extended Management_ACL\
+R1(config-ext-nacl)#permit ip any any\
+R1(config-ext-nacl)#exit\
+R1(config)#int g0/0.10\
+R1(config-subif)#ip access-group Management_ACL in\
+R1(config-subif)#exit\
+R1(config)#ip domain-name greywan.com\
+R1(config)#crypto key generate rsa modulus 2048\
+R1(config)#username wantech secret Greym@nw@n1\
+R1(config)#ip access-list standard Management_ACCESS\
+R1(config-std-nacl)#permit 10.0.1.0 0.0.0.255\
+R1(config-std-nacl)#permit 10.1.1.0 0.0.0.255\
+R1(config-std-nacl)#permit 10.2.1.0 0.0.0.255\
+R1(config-std-nacl)#exit\
+R1(config)#line vty 0 4\
+R1(config-line)#access-class Management_ACCESS in\
+R1(config-line)#transport input ssh\
+R1(config-line)#login local\
+R1(config-line)#exec-timeout 5 0\
+R1(config-line)#exit\
+R1(config)#ip ssh version 2\
+R1(config)#service password-encryption\
+R1(config)#exit
+
+# Router R2 ACL and Security Configuration
 
 
 

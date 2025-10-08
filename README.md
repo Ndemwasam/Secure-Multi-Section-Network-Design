@@ -355,19 +355,27 @@ R2#copy running-config startup-config
 R0>en\
 R0#conf t\
 R0(config)#ip access-list extended GUEST_ACL\
+R0(config-ext-nacl)#permit icmp 10.0.3.0 0.0.0.255 10.0.0.0 0.0.255.255 echo-reply\
+R0(config-ext-nacl)#permit icmp 10.0.3.0 0.0.0.255 10.1.0.0 0.0.255.255 echo-reply\
+R0(config-ext-nacl)#permit icmp 10.0.3.0 0.0.0.255 10.2.0.0 0.0.255.255 echo-reply\
 R0(config-ext-nacl)#deny ip 10.0.3.0 0.0.0.255 10.0.0.0 0.0.255.255\
 R0(config-ext-nacl)#deny ip 10.0.3.0 0.0.0.255 10.1.0.0 0.0.255.255\
 R0(config-ext-nacl)#deny ip 10.0.3.0 0.0.0.255 10.2.0.0 0.0.255.255\
 R0(config-ext-nacl)#permit ip any any\
 R0(config-ext-nacl)#exit\
 R0(config)#ip access-list extended USER_ACL\
+R0(config-ext-nacl)#permit icmp 10.0.2.0 0.0.0.255 10.0.1.0 0.0.0.255 echo-reply\
+R0(config-ext-nacl)#permit icmp 10.0.2.0 0.0.0.255 10.1.1.0 0.0.0.255 echo-reply\
+R0(config-ext-nacl)#permit icmp 10.0.2.0 0.0.0.255 10.2.1.0 0.0.0.255 echo-reply\
 R0(config-ext-nacl)#deny ip 10.0.2.0 0.0.0.255 10.0.1.0 0.0.0.255\
 R0(config-ext-nacl)#deny ip 10.0.2.0 0.0.0.255 10.1.1.0 0.0.0.255\
 R0(config-ext-nacl)#deny ip 10.0.2.0 0.0.0.255 10.2.1.0 0.0.0.255\
 R0(config-ext-nacl)#permit ip any any\
 R0(config-ext-nacl)#exit\
 R0(config)# ip access-list extended MGMT_ACL\
-R0(config-ext-nacl)#permit ip any any\
+R0(config-ext-nacl)#permit ip 10.0.1.0 0.0.0.255 any\
+R0(config-ext-nacl)#permit ip 10.1.1.0 0.0.0.255 any\
+R0(config-ext-nacl)#permit ip 10.2.1.0 0.0.0.255 any\
 R0(config-ext-nacl)#exit\
 R0(config)#int g0/0.30\
 R0(config-subif)#ip access-group GUEST_ACL in\
@@ -399,6 +407,9 @@ R0(config)#service password-encryption\
 R1>en\
 R1#conf t\
 R1(config)#ip access-list extended Guests_ACL\
+R1(config-ext-nacl)#permit icmp 10.1.3.0 0.0.0.255 10.0.0.0 0.0.255.255 echo-reply\
+R1(config-ext-nacl)#permit icmp 10.1.3.0 0.0.0.255 10.1.0.0 0.0.255.255 echo-reply\
+R1(config-ext-nacl)#permit icmp 10.1.3.0 0.0.0.255 10.2.0.0 0.0.255.255 echo-reply\
 R1(config-ext-nacl)#deny ip 10.1.3.0 0.0.0.255 10.0.0.0 0.0.255.255\
 R1(config-ext-nacl)#deny ip 10.1.3.0 0.0.0.255 10.1.0.0 0.0.255.255\
 R1(config-ext-nacl)#deny ip 10.1.3.0 0.0.0.255 10.2.0.0 0.0.255.255\
@@ -408,6 +419,9 @@ R1(config)#int g0/0.30\
 R1(config-subif)#ip access-group Guests_ACL in\
 R1(config-subif)#exit\
 R1(config)#ip access-list extended Users_ACL\
+R1(config-ext-nacl)#permit icmp 10.1.2.0 0.0.0.255 10.0.1.0 0.0.0.255 echo-reply\
+R1(config-ext-nacl)#permit icmp 10.1.2.0 0.0.0.255 10.1.1.0 0.0.0.255 echo-reply\
+R1(config-ext-nacl)#permit icmp 10.1.2.0 0.0.0.255 10.2.1.0 0.0.0.255 echo-reply\
 R1(config-ext-nacl)#deny ip 10.1.2.0 0.0.0.255 10.0.1.0 0.0.0.255\
 R1(config-ext-nacl)#deny ip 10.1.2.0 0.0.0.255 10.1.1.0 0.0.0.255\
 R1(config-ext-nacl)#deny ip 10.1.2.0 0.0.0.255 10.2.1.0 0.0.0.255\
@@ -416,7 +430,9 @@ R1(config-ext-nacl)#exit\
 R1(config)#int g0/0.20\
 R1(config-subif)#ip access-group Users_ACL in\
 R1(config)#ip access-list extended Management_ACL\
-R1(config-ext-nacl)#permit ip any any\
+R1(config-ext-nacl)#permit ip 10.0.1.0 0.0.0.255 any\
+R1(config-ext-nacl)#permit ip 10.1.1.0 0.0.0.255 any\
+R1(config-ext-nacl)#permit ip 10.2.1.0 0.0.0.255 any\
 R1(config-ext-nacl)#exit\
 R1(config)#int g0/0.10\
 R1(config-subif)#ip access-group Management_ACL in\
@@ -440,6 +456,54 @@ R1(config)#service password-encryption\
 R1(config)#exit
 
 # Router R2 ACL and Security Configuration
-
-
-
+R2(config)#ip access-list extended User_ACL\
+R2(config-ext-nacl)#permit icmp 10.2.2.0 0.0.0.255 10.0.1.0 0.0.0.255\
+R2(config-ext-nacl)#permit icmp 10.2.2.0 0.0.0.255 10.0.1.0 0.0.0.255 echo-reply\
+R2(config-ext-nacl)#permit icmp 10.2.2.0 0.0.0.255 10.1.1.0 0.0.0.255 echo-reply\
+R2(config-ext-nacl)#permit icmp 10.2.2.0 0.0.0.255 10.2.1.0 0.0.0.255 echo-reply\
+R2(config-ext-nacl)#deny ip 10.2.2.0 0.0.0.255 10.0.1.0 0.0.0.255\
+R2(config-ext-nacl)#deny ip 10.2.2.0 0.0.0.255 10.1.1.0 0.0.0.255\
+R2(config-ext-nacl)#deny ip 10.2.2.0 0.0.0.255 10.2.1.0 0.0.0.255\
+R2(config-ext-nacl)#permit ip any any\
+R2(config-ext-nacl)#exit\
+R2(config)#ip access-list extended Guest_ACL\
+R2(config-ext-nacl)#permit icmp 10.2.3.0 0.0.0.255 10.0.0.0 0.0.255.255 echo-reply\
+R2(config-ext-nacl)#permit icmp 10.2.3.0 0.0.0.255 10.1.0.0 0.0.255.255 echo-reply\
+R2(config-ext-nacl)#permit icmp 10.2.3.0 0.0.0.255 10.2.0.0 0.0.255.255 echo-reply\
+R2(config-ext-nacl)#deny ip 10.2.3.0 0.0.0.255 10.0.0.0 0.0.255.255\
+R2(config-ext-nacl)#deny ip 10.2.3.0 0.0.0.255 10.1.0.0 0.0.255.255\
+R2(config-ext-nacl)#deny ip 10.2.3.0 0.0.0.255 10.2.0.0 0.0.255.255\
+R2(config-ext-nacl)#permit ip any any\
+R2(config-ext-nacl)#exit\
+R2(config)#ip access-list extended Management_ACL\
+R2(config-ext-nacl)#permit ip 10.0.1.0 0.0.0.255 any\
+R2(config-ext-nacl)#permit ip 10.1.1.0 0.0.0.255 any\
+R2(config-ext-nacl)#permit ip 10.2.1.0 0.0.0.255 any\
+R2(config-ext-nacl)#exit\
+R2(config)#int g0/0.10\
+R2(config-subif)#ip access-group Management_ACL in\
+R2(config-subif)#exit\
+R2(config)#int g0/0.20\
+R2(config-subif)#ip access-group User_ACL in\
+R2(config-subif)#int g0/0.30\
+R2(config-subif)#ip access-group Guest_ACL in\
+R2(config-subif)#exit\
+R2(config)#int g0/0.30\
+R2(config-subif)#ip access-group Guest_ACL in\
+R2(config)#ip domain-name greywan.com\
+R2(config)#crypto key generate rsa modulus 2048\
+R2(config)#username wantech secret Greym@nw@n1\
+R2(config)#ip access-list standard Management_ACCESS\
+R2(config-std-nacl)#permit 10.0.1.0 0.0.0.255\
+R2(config-std-nacl)#permit 10.1.1.0 0.0.0.255\
+R2(config-std-nacl)#permit 10.2.1.0 0.0.0.255\
+R2(config-std-nacl)#exit\
+R2(config)#line vty 0 4\
+R2(config-line)#access-class Management_ACCESS in\
+R2(config-line)#transport input ssh\
+R2(config-line)#login local\
+R2(config-line)#exec-timeout 5 0\
+R2(config-line)#exit\
+R2(config)#ip ssh version 2\
+R2(config)#service password-encryption\
+R2(config)#exit\

@@ -506,4 +506,14 @@ R2(config-line)#exec-timeout 5 0\
 R2(config-line)#exit\
 R2(config)#ip ssh version 2\
 R2(config)#service password-encryption\
-R2(config)#exit\
+R2(config)#exit
+
+# Verification test
+# 1 Vlan Segmentation
+Before routing on stick the three vlan 10,20,30 could not communicate to each other,after configuration on router on stick communication was successful. Also i configured inter vlan routing using open shortest path first to enable vlans accross the three sections to communicate.\
+<img width="1360" height="764" alt="ping pc2 from pc0" src="https://github.com/user-attachments/assets/16d28741-d202-4ad6-8268-ab4bae7b9005" />\
+<img width="1359" height="764" alt="ping pc7 from pc6" src="https://github.com/user-attachments/assets/f50ed0b7-3f7c-423e-ab8d-16f85242eb7d" />\
+<img width="1366" height="768" alt="Intervlan comm ospf protocol R0 to R1R2" src="https://github.com/user-attachments/assets/ff82c5c3-8602-4f4c-b808-3d363f552b70" />\
+# 2 Verify Port Security
+
+

@@ -515,5 +515,10 @@ Before routing on stick the three vlan 10,20,30 could not communicate to each ot
 <img width="1359" height="764" alt="ping pc7 from pc6" src="https://github.com/user-attachments/assets/f50ed0b7-3f7c-423e-ab8d-16f85242eb7d" />\
 <img width="1366" height="768" alt="Intervlan comm ospf protocol R0 to R1R2" src="https://github.com/user-attachments/assets/ff82c5c3-8602-4f4c-b808-3d363f552b70" />\
 # 2 Verify Port Security
+I changed the mac address of PC2 on that is connected to switch S0 via interface f0/5 to trigger a a violation and below is a screenshot showing violation
+<img width="705" height="455" alt="change pc2 mac" src="https://github.com/user-attachments/assets/5184cb7a-c77c-4e5b-ace7-51f0d1088f2d" />\
+<img width="1364" height="765" alt="Port security" src="https://github.com/user-attachments/assets/567ef8b0-62f9-477c-b349-dd37b92bf645" />
+
+# 2 DHCP Verification
 
 

@@ -519,6 +519,24 @@ I changed the mac address of PC2 on that is connected to switch S0 via interface
 <img width="705" height="455" alt="change pc2 mac" src="https://github.com/user-attachments/assets/5184cb7a-c77c-4e5b-ace7-51f0d1088f2d" />\
 <img width="1364" height="765" alt="Port security" src="https://github.com/user-attachments/assets/567ef8b0-62f9-477c-b349-dd37b92bf645" />
 
-# 2 DHCP Verification
+# 3 DHCP Verification
+<img width="678" height="729" alt="show ip dhcp pool" src="https://github.com/user-attachments/assets/e482ddc6-4ef6-4aa0-af09-68da9ae4b56b" />\
+<img width="700" height="712" alt="show ip dhcp snooping on S0" src="https://github.com/user-attachments/assets/2cf653d4-e192-4616-b29e-5e2b6aa15d19" />
+
+# 4 ACL enforcement
+Ping from guest PC5 to user and management failed, guest isolation to internal network
+<img width="697" height="710" alt="Ping Showing the guest cannot access internal network" src="https://github.com/user-attachments/assets/c085b517-e6e9-49d2-b0c4-813685652404" />\
+
+ping from user PC7 to Management and guest pc
+<img width="701" height="705" alt="pinging from user to management then guest" src="https://github.com/user-attachments/assets/bf9b373a-f32f-4604-a623-5ff979a44c82" />\
+
+Management ssh to routers and ping from Management to user and guest
+<img width="706" height="712" alt="management ssh to routers" src="https://github.com/user-attachments/assets/ef7dee6c-07d3-432d-a15a-b78f50e0993d" />\
+
+<img width="699" height="705" alt="Management ping to other user and guest pc" src="https://github.com/user-attachments/assets/040e14ee-a93c-47ac-ae29-507238076c95" />
+
+
+
+
 
 

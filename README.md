@@ -515,9 +515,10 @@ Before routing on stick the three vlan 10,20,30 could not communicate to each ot
 <img width="1359" height="764" alt="ping pc7 from pc6" src="https://github.com/user-attachments/assets/f50ed0b7-3f7c-423e-ab8d-16f85242eb7d" />\
 <img width="1366" height="768" alt="Intervlan comm ospf protocol R0 to R1R2" src="https://github.com/user-attachments/assets/ff82c5c3-8602-4f4c-b808-3d363f552b70" />\
 # 2 Verify Port Security
-I changed the mac address of PC2 on that is connected to switch S0 via interface f0/5 to trigger a a violation and below is a screenshot showing violation
-<img width="705" height="455" alt="change pc2 mac" src="https://github.com/user-attachments/assets/5184cb7a-c77c-4e5b-ace7-51f0d1088f2d" />\
-<img width="1364" height="765" alt="Port security" src="https://github.com/user-attachments/assets/567ef8b0-62f9-477c-b349-dd37b92bf645" />
+I changed the mac address of PC0 on that is connected to switch S0 via interface f0/1 to trigger a a violation and below is a screenshot showing violation
+<img width="1361" height="731" alt="switchport security int f01 down" src="https://github.com/user-attachments/assets/449059ee-8808-46c3-99ee-a0beedb76218" />
+<img width="713" height="715" alt="port security" src="https://github.com/user-attachments/assets/3e502aed-f336-4a1c-9b2b-d390d87e47cb" />
+
 
 # 3 DHCP Verification
 <img width="678" height="729" alt="show ip dhcp pool" src="https://github.com/user-attachments/assets/e482ddc6-4ef6-4aa0-af09-68da9ae4b56b" />\
